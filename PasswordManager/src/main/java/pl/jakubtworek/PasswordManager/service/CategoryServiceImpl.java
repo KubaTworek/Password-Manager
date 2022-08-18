@@ -6,8 +6,10 @@ import pl.jakubtworek.PasswordManager.dao.CategoryDAO;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
+import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -23,11 +25,6 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public List<Category> findAll() {
         return categoryDAO.findAll();
-    }
-
-    @Override
-    public List<Category> findByUser() {
-        return null;
     }
 
     @Override
@@ -49,11 +46,11 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void save(Category theCategory) {
-
+        categoryDAO.save(theCategory);
     }
 
     @Override
     public void deleteById(int theId) {
-
+        categoryDAO.deleteById(theId);
     }
 }

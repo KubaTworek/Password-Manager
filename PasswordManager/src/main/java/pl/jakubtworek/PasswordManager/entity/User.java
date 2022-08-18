@@ -55,6 +55,4 @@ public class User {
     public void setPasswords(List<Password> passwords) {
         this.passwords = passwords;
     }
-
-
 }

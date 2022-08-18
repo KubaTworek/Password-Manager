@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> findAll() {
-        return null;
+        return userDAO.findAll();
     }
 
     @Override
@@ -33,11 +33,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void save(User theUser) {
-
+        userDAO.save(theUser);
     }
 
     @Override
     public void deleteByUsername(String theUsername) {
-
+        userDAO.delete(findByUsername(theUsername));
     }
 }

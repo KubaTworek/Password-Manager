@@ -77,16 +77,10 @@ public class PasswordRestController {
         return thePassword;
     }
 
-    @PutMapping("/password")
-    public Password updatePassword(@RequestBody Password thePassword){
-        passwordService.save(thePassword);
-
-        return thePassword;
-    }
-
     @DeleteMapping("/password/{passwordId}")
     public String deletePassword(@PathVariable int passwordId) throws Exception {
         if(passwordService.findById(passwordId) == null) throw new Exception("Password id not found - " + passwordId);
+        passwordService.deleteById(passwordId);
 
         return "Deleted password is - " + passwordId;
     }

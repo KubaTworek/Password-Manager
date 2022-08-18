@@ -81,7 +81,7 @@ public class Password {
         return user.getUsername();
     }
 
-    public void setUser_username(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }
