@@ -1,5 +1,7 @@
 package pl.jakubtworek.PasswordManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,13 +19,30 @@ public class Password {
     @Column(name="value")
     private String value;
 
-    @Column(name="category_id")
-    private int category_id;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="category_id")
+    private Category category;
 
-    @Column(name="user_username")
-    private String user_username;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_username")
+    private User user;
 
     public Password() {
+    }
+
+    public Password(int id, String name, String value, Category category, User user) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.category = category;
+        this.user = user;
+    }
+
+    public Password(String name, String value, Category category, User user) {
+        this.name = name;
+        this.value = value;
+        this.category = category;
+        this.user = user;
     }
 
     public int getId() {
@@ -50,19 +69,19 @@ public class Password {
         this.value = value;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public int getCategory() {
+        return category.getId();
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getUser_username() {
-        return user_username;
+        return user.getUsername();
     }
 
-    public void setUser_username(String user_username) {
-        this.user_username = user_username;
+    public void setUser_username(User user) {
+        this.user = user;
     }
 }
