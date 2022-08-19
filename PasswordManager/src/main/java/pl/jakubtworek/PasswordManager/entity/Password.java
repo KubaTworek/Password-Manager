@@ -77,7 +77,7 @@ public class Password {
         this.category = category;
     }
 
-    public String getUser_username() {
+    public String getUser() {
         return user.getUsername();
     }
 

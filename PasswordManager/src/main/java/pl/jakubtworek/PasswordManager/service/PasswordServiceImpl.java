@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
-import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,16 +61,16 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
-    public List<Password> findAllByUser(User user) {
+    public List<Password> findAllByUser(String username) {
         List<Password> passwords = passwordDAO.findAll();
-        passwords.removeIf(password -> !Objects.equals(password.getUser_username(), user.getUsername()));
-        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords for user - " + user.getUsername());
+        passwords.removeIf(password -> !Objects.equals(password.getUser(), username));
+        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords for user - " + username);
         return passwords;
     }
 
     @Override
-    public Password findByNameAndUser(String name, User user) {
-        List<Password> passwords = findAllByUser(user);
+    public Password findByNameAndUser(String name, String username) {
+        List<Password> passwords = findAllByUser(username);
         Password password = findByName(name);
         if(passwords.contains(password)) return password;
         throw new RuntimeException("Did not find password name - " + name);
@@ -79,8 +78,8 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
-    public List<Password> findByCategoryAndUser(Category category, User user) {
-        List<Password> passwordsByUser = findAllByUser(user);
+    public List<Password> findByCategoryAndUser(Category category, String username) {
+        List<Password> passwordsByUser = findAllByUser(username);
         List<Password> passwordsByCategory = findByCategory(category);
         List<Password> passwords = new ArrayList<>();
         for(Password password : passwordsByUser){

@@ -50,23 +50,23 @@ public class PasswordRestController {
 
     @GetMapping("/passwords/user/{username}")
     public List<Password> getPasswordsByUser(@PathVariable String username) throws Exception {
-        if(passwordService.findAllByUser(userService.findByUsername(username)).isEmpty()) throw new Exception("Passwords for that user not found");
+        if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
 
-        return passwordService.findAllByUser(userService.findByUsername(username));
+        return passwordService.findAllByUser(username);
     }
 
     @GetMapping("/password/user/{username}/{passwordName}")
     public Password getPasswordsByUserAndName(@PathVariable String username, @PathVariable String passwordName) throws Exception {
-        if(passwordService.findAllByUser(userService.findByUsername(username)).isEmpty()) throw new Exception("Passwords for that user not found");
+        if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
 
-        return passwordService.findByNameAndUser(passwordName,userService.findByUsername(username));
+        return passwordService.findByNameAndUser(passwordName,username);
     }
 
     @GetMapping("/passwords/user/{username}/{categoryId}")
     public List<Password> getPasswordsByUserAndCategory(@PathVariable String username, @PathVariable int categoryId) throws Exception {
-        if(passwordService.findAllByUser(userService.findByUsername(username)).isEmpty()) throw new Exception("Passwords for that user not found");
+        if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
 
-        return passwordService.findByCategoryAndUser(categoryService.findById(categoryId),userService.findByUsername(username));
+        return passwordService.findByCategoryAndUser(categoryService.findById(categoryId),username);
     }
 
     @PostMapping("/password")

@@ -15,11 +15,11 @@ public interface PasswordService {
 
     public Password findById(int theId);
 
-    public List<Password> findAllByUser(User username);
+    public List<Password> findAllByUser(String username);
 
-    public Password findByNameAndUser(String name, User username);
+    public Password findByNameAndUser(String name, String username);
 
-    public List<Password> findByCategoryAndUser(Category category, User username);
+    public List<Password> findByCategoryAndUser(Category category, String username);
 
     public void save(Password thePassword);
 

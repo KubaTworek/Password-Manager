@@ -3,25 +3,16 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Menu</title>
-</head>
-<body>
-<div sec:authorize="isAuthenticated()">
     <div sec:authorize="hasRole('ROLE_USER')">
-        <a th:href="@{/user/user-passwords}">Passwords</a>
-        <a th:href="@{/user/user-category}">Category</a>
+        <meta http-equiv="refresh"
+              content="0; URL='user/user-passwords'">
     </div>
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a th:href="@{/admin/admin-passwords}">Passwords</a>
-        <a th:href="@{/admin/admin-category}">Category</a>
+        <meta http-equiv="refresh"
+              content="0; URL='admin/admin-passwords'">
     </div>
-    <sec:authorize access="isAuthenticated()">
-        <form th:action="@{/logout}" method="POST">
-            <input type="submit" value="Logout">
-        </form>
-    </sec:authorize>
-</div>
-
+</head>
+<body>
 
 </body>
 </html>
