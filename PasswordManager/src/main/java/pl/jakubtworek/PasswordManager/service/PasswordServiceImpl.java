@@ -1,11 +1,14 @@
 package pl.jakubtworek.PasswordManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
+import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,12 @@ import java.util.Optional;
 public class PasswordServiceImpl implements PasswordService{
 
     private PasswordDAO passwordDAO;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     public PasswordServiceImpl(PasswordDAO thePasswordDAO) {
@@ -67,7 +76,7 @@ public class PasswordServiceImpl implements PasswordService{
     @Transactional
     public List<Password> findByCategory(Category category) {
         List<Password> passwords = passwordDAO.findAll();
-        passwords.removeIf(password -> !Objects.equals(password.getCategory().getName(), category.getId()));
+        passwords.removeIf(password -> !Objects.equals(password.getCategory().getId(), category.getId()));
         if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords with category - " + category.getName());
         return passwords;
     }
@@ -102,5 +111,17 @@ public class PasswordServiceImpl implements PasswordService{
         }
         if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords in this category - " + category.getName());
         return passwords;
+    }
+
+
+    @Override
+    @Transactional
+    public void saveWithCategoryAndUser(Password thePassword, Category category) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        thePassword.setUser(userService.findByUsername(currentPrincipalName));
+        thePassword.setCategory(category);
+        passwordDAO.save(thePassword);
     }
 }

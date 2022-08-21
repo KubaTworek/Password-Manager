@@ -61,7 +61,7 @@ public class UserController {
     public String savePassword(@ModelAttribute("password") Password thePassword) {
 
         // save the employee
-        passwordService.save(thePassword);
+        passwordService.saveWithCategoryAndUser(thePassword, thePassword.getCategory());
 
         // use a redirect to prevent duplicate submissions
         return "redirect:/user/user-passwords";
