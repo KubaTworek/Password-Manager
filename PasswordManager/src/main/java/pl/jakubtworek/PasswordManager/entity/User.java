@@ -1,7 +1,12 @@
 package pl.jakubtworek.PasswordManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name="users")
@@ -17,8 +22,8 @@ public class User {
     @Column(name="enabled")
     private int enabled;
 
-    @OneToMany
-    @JoinColumn(name="user_username")
+    @OneToMany(mappedBy = "user", cascade = { ALL })
+    @JsonManagedReference(value="user_username")
     private List<Password> passwords;
 
     public User() {
@@ -54,5 +59,14 @@ public class User {
 
     public void setPasswords(List<Password> passwords) {
         this.passwords = passwords;
+    }
+
+    public void add(Password tempPassword) {
+        if(passwords == null) {
+            passwords = new ArrayList<>();
+        }
+
+        passwords.add(tempPassword);
+        tempPassword.setUser(this);
     }
 }

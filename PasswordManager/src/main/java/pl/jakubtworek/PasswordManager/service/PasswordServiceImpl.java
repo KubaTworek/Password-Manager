@@ -2,6 +2,7 @@ package pl.jakubtworek.PasswordManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
@@ -21,27 +22,9 @@ public class PasswordServiceImpl implements PasswordService{
         passwordDAO = thePasswordDAO;
     }
 
-
     @Override
     public List<Password> findAll() {
         return passwordDAO.findAll();
-    }
-
-    @Override
-    public Password findByName(String name) {
-        List<Password> passwords = passwordDAO.findAll();
-        for(Password password  : passwords){
-            if(Objects.equals(password.getName(), name)) return password;
-        }
-        throw new RuntimeException("Did not find password name - " + name);
-    }
-
-    @Override
-    public List<Password> findByCategory(Category category) {
-        List<Password> passwords = passwordDAO.findAll();
-        passwords.removeIf(password -> !Objects.equals(password.getCategory(), category.getId()));
-        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords with category - " + category.getName());
-        return passwords;
     }
 
     @Override
@@ -61,14 +44,45 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
+    public void save(Password thePassword) {
+        passwordDAO.save(thePassword);
+    }
+
+    @Override
+    public void deleteById(int theId) {
+        passwordDAO.deleteById(theId);
+    }
+
+    @Override
+    @Transactional
+    public Password findByName(String name) {
+        List<Password> passwords = passwordDAO.findAll();
+        for(Password password  : passwords){
+            if(Objects.equals(password.getName(), name)) return password;
+        }
+        throw new RuntimeException("Did not find password name - " + name);
+    }
+
+    @Override
+    @Transactional
+    public List<Password> findByCategory(Category category) {
+        List<Password> passwords = passwordDAO.findAll();
+        passwords.removeIf(password -> !Objects.equals(password.getCategory().getName(), category.getId()));
+        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords with category - " + category.getName());
+        return passwords;
+    }
+
+    @Override
+    @Transactional
     public List<Password> findAllByUser(String username) {
         List<Password> passwords = passwordDAO.findAll();
-        passwords.removeIf(password -> !Objects.equals(password.getUser(), username));
+        passwords.removeIf(password -> !Objects.equals(password.getUser().getUsername(), username));
         if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords for user - " + username);
         return passwords;
     }
 
     @Override
+    @Transactional
     public Password findByNameAndUser(String name, String username) {
         List<Password> passwords = findAllByUser(username);
         Password password = findByName(name);
@@ -78,6 +92,7 @@ public class PasswordServiceImpl implements PasswordService{
     }
 
     @Override
+    @Transactional
     public List<Password> findByCategoryAndUser(Category category, String username) {
         List<Password> passwordsByUser = findAllByUser(username);
         List<Password> passwordsByCategory = findByCategory(category);
@@ -87,15 +102,5 @@ public class PasswordServiceImpl implements PasswordService{
         }
         if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords in this category - " + category.getName());
         return passwords;
-    }
-
-    @Override
-    public void save(Password thePassword) {
-        passwordDAO.save(thePassword);
-    }
-
-    @Override
-    public void deleteById(int theId) {
-        passwordDAO.deleteById(theId);
     }
 }

@@ -2,6 +2,7 @@ package pl.jakubtworek.PasswordManager.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
 import pl.jakubtworek.PasswordManager.service.CategoryService;
 import pl.jakubtworek.PasswordManager.service.PasswordService;
@@ -35,7 +36,7 @@ public class PasswordRestController {
     }
 
     @GetMapping("/passwords/name/{passwordName}")
-    public Password getPasswordsById(@PathVariable String passwordName) throws Exception {
+    public Password getPasswordsByName(@PathVariable String passwordName) throws Exception {
         if(passwordService.findByName(passwordName) == null) throw new Exception("Password name not found - " + passwordName);
 
         return passwordService.findByName(passwordName);

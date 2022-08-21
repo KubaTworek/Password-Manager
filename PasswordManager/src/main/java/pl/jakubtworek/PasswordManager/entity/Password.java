@@ -1,8 +1,12 @@
 package pl.jakubtworek.PasswordManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 @Table(name="password")
@@ -21,28 +25,15 @@ public class Password {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="category_id")
+    @JsonBackReference(value="category_id")
     private Category category;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_username")
+    @JsonBackReference(value="user_username")
     private User user;
 
     public Password() {
-    }
-
-    public Password(int id, String name, String value, Category category, User user) {
-        this.id = id;
-        this.name = name;
-        this.value = value;
-        this.category = category;
-        this.user = user;
-    }
-
-    public Password(String name, String value, Category category, User user) {
-        this.name = name;
-        this.value = value;
-        this.category = category;
-        this.user = user;
     }
 
     public int getId() {
@@ -69,16 +60,16 @@ public class Password {
         this.value = value;
     }
 
-    public int getCategory() {
-        return category.getId();
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
     }
 
-    public String getUser() {
-        return user.getUsername();
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {
