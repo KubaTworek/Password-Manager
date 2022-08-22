@@ -1,6 +1,7 @@
 package pl.jakubtworek.PasswordManager.controller;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import pl.jakubtworek.PasswordManager.service.PasswordService;
 
 import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,11 +32,22 @@ public class UserController {
     }
 
     @GetMapping("/user-passwords")
-    public String getUserPasswords(Model theModel) {
+    public String getUserPasswords(Model theModel,@ModelAttribute("keyword") String keyword, @ModelAttribute("category") String category) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
 
+        List<Category> theCategories = categoryService.findAll();
+        theModel.addAttribute("categories", theCategories);
+
         List<Password> thePasswords = passwordService.findAllByUser(currentPrincipalName);
+        if(!keyword.isEmpty()) {
+            thePasswords = passwordService.findByName(keyword);
+            theModel.addAttribute("keyword", keyword);
+        }
+        if(!category.isEmpty()) {
+            thePasswords = passwordService.findByCategory(categoryService.findByName(category));
+            theModel.addAttribute("category", category);
+        }
 
         theModel.addAttribute("passwords", thePasswords);
 
@@ -69,9 +82,7 @@ public class UserController {
         theModel.addAttribute("password", thePassword);
         List<Category> theCategories = categoryService.findAll();
         theModel.addAttribute("categories", theCategories);
-
-
-        // send over to our form
+        
         return "user/password-form";
     }
 
@@ -79,10 +90,8 @@ public class UserController {
     @PostMapping("/save")
     public String savePassword(@ModelAttribute("password") Password thePassword,@RequestParam("category.name") String categoryName) {
 
-        // save the employee
         passwordService.saveWithCategoryAndUser(thePassword, categoryService.findByName(categoryName));
 
-        // use a redirect to prevent duplicate submissions
         return "redirect:/user/user-passwords";
     }
 
@@ -91,5 +100,4 @@ public class UserController {
         passwordService.deleteById(theId);
         return "redirect:/user/user-passwords";
     }
-
 }

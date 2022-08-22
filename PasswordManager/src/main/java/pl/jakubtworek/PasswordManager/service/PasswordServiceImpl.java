@@ -70,12 +70,10 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     @Transactional
-    public Password findByName(String name) {
+    public List<Password> findByName(String name) {
         List<Password> passwords = passwordDAO.findAll();
-        for(Password password  : passwords){
-            if(Objects.equals(password.getName(), name)) return password;
-        }
-        throw new RuntimeException("Did not find password name - " + name);
+        passwords.removeIf(password -> !Objects.equals(password.getName(), name));
+        return passwords;
     }
 
     @Override
@@ -83,7 +81,6 @@ public class PasswordServiceImpl implements PasswordService{
     public List<Password> findByCategory(Category category) {
         List<Password> passwords = passwordDAO.findAll();
         passwords.removeIf(password -> !Objects.equals(password.getCategory().getId(), category.getId()));
-        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords with category - " + category.getName());
         return passwords;
     }
 
@@ -94,30 +91,6 @@ public class PasswordServiceImpl implements PasswordService{
         passwords.removeIf(password -> !Objects.equals(password.getUser().getUsername(), username));
         return passwords;
     }
-
-    @Override
-    @Transactional
-    public Password findByNameAndUser(String name, String username) {
-        List<Password> passwords = findAllByUser(username);
-        Password password = findByName(name);
-        if(passwords.contains(password)) return password;
-        throw new RuntimeException("Did not find password name - " + name);
-
-    }
-
-    @Override
-    @Transactional
-    public List<Password> findByCategoryAndUser(Category category, String username) {
-        List<Password> passwordsByUser = findAllByUser(username);
-        List<Password> passwordsByCategory = findByCategory(category);
-        List<Password> passwords = new ArrayList<>();
-        for(Password password : passwordsByUser){
-            if(passwordsByCategory.contains(password)) passwords.add(password);
-        }
-        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords in this category - " + category.getName());
-        return passwords;
-    }
-
 
     @Override
     @Transactional
