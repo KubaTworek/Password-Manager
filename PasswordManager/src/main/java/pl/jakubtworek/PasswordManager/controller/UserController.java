@@ -1,13 +1,20 @@
 package pl.jakubtworek.PasswordManager.controller;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
+import pl.jakubtworek.PasswordManager.service.CategoryService;
 import pl.jakubtworek.PasswordManager.service.PasswordService;
 
+import javax.annotation.PostConstruct;
+import java.security.SecureRandom;
 import java.util.List;
 
 @Controller
@@ -15,9 +22,11 @@ import java.util.List;
 public class UserController {
 
     private PasswordService passwordService;
+    private CategoryService categoryService;
 
-    public UserController(PasswordService passwordService) {
+    public UserController(PasswordService passwordService, CategoryService categoryService) {
         this.passwordService = passwordService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/user-passwords")
@@ -38,7 +47,10 @@ public class UserController {
         // create model attribute to bind form data
         Password thePassword = new Password();
 
+        List<Category> theCategories = categoryService.findAll();
+
         theModel.addAttribute("password", thePassword);
+        theModel.addAttribute("categories", theCategories);
 
         return "user/password-form";
     }
@@ -49,19 +61,26 @@ public class UserController {
 
         // get the employee from the service
         Password thePassword = passwordService.findById(theId);
+        String decodedString = new String(Base64.decodeBase64(thePassword.getValue().getBytes()));
+        thePassword.setValue(decodedString);
+
 
         // set employee as a model attribute to pre-populate the form
         theModel.addAttribute("password", thePassword);
+        List<Category> theCategories = categoryService.findAll();
+        theModel.addAttribute("categories", theCategories);
+
 
         // send over to our form
         return "user/password-form";
     }
 
+
     @PostMapping("/save")
-    public String savePassword(@ModelAttribute("password") Password thePassword) {
+    public String savePassword(@ModelAttribute("password") Password thePassword,@RequestParam("category.name") String categoryName) {
 
         // save the employee
-        passwordService.saveWithCategoryAndUser(thePassword, thePassword.getCategory());
+        passwordService.saveWithCategoryAndUser(thePassword, categoryService.findByName(categoryName));
 
         // use a redirect to prevent duplicate submissions
         return "redirect:/user/user-passwords";

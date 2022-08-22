@@ -1,8 +1,10 @@
 package pl.jakubtworek.PasswordManager.service;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
@@ -10,6 +12,7 @@ import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
 import pl.jakubtworek.PasswordManager.entity.User;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +57,9 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     public void save(Password thePassword) {
+        String encodedString = new String(Base64.encodeBase64(thePassword.getValue().getBytes()));
+        thePassword.setValue(encodedString);
+
         passwordDAO.save(thePassword);
     }
 
@@ -86,7 +92,6 @@ public class PasswordServiceImpl implements PasswordService{
     public List<Password> findAllByUser(String username) {
         List<Password> passwords = passwordDAO.findAll();
         passwords.removeIf(password -> !Objects.equals(password.getUser().getUsername(), username));
-        if(passwords.isEmpty()) throw new RuntimeException("Did not find passwords for user - " + username);
         return passwords;
     }
 
@@ -122,6 +127,6 @@ public class PasswordServiceImpl implements PasswordService{
 
         thePassword.setUser(userService.findByUsername(currentPrincipalName));
         thePassword.setCategory(category);
-        passwordDAO.save(thePassword);
+        save(thePassword);
     }
 }

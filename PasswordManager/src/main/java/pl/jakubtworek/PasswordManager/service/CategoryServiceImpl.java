@@ -45,6 +45,15 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    public Category findByName(String theName){
+        List<Category> categories = categoryDAO.findAll();
+        for(Category category  : categories){
+            if(Objects.equals(category.getName(), theName)) return category;
+        }
+        throw new RuntimeException("Did not find password name - " + theName);
+    }
+
+    @Override
     public void save(Category theCategory) {
         categoryDAO.save(theCategory);
     }

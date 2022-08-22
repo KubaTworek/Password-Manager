@@ -10,6 +10,8 @@ public interface CategoryService {
 
     public Category findById(int theId);
 
+    public Category findByName(String theName);
+
     public void save(Category theCategory);
 
     public void deleteById(int theId);
