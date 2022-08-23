@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
+import pl.jakubtworek.PasswordManager.entity.User;
 import pl.jakubtworek.PasswordManager.service.CategoryService;
 import pl.jakubtworek.PasswordManager.service.PasswordService;
 
@@ -82,7 +83,7 @@ public class UserController {
         theModel.addAttribute("password", thePassword);
         List<Category> theCategories = categoryService.findAll();
         theModel.addAttribute("categories", theCategories);
-        
+
         return "user/password-form";
     }
 
@@ -90,7 +91,7 @@ public class UserController {
     @PostMapping("/save")
     public String savePassword(@ModelAttribute("password") Password thePassword,@RequestParam("category.name") String categoryName) {
 
-        passwordService.saveWithCategoryAndUser(thePassword, categoryService.findByName(categoryName));
+        passwordService.saveWithCategory(thePassword, categoryService.findByName(categoryName));
 
         return "redirect:/user/user-passwords";
     }

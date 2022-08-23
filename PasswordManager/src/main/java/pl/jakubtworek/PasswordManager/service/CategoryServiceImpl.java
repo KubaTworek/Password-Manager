@@ -1,12 +1,12 @@
 package pl.jakubtworek.PasswordManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import pl.jakubtworek.PasswordManager.dao.CategoryDAO;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
-import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.util.List;
 import java.util.Objects;

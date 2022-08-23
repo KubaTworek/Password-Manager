@@ -1,6 +1,7 @@
 package pl.jakubtworek.PasswordManager.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,8 +29,6 @@ public class User {
 
     public User() {
     }
-
-
 
     public String getUsername() {
         return username;

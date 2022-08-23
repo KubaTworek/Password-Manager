@@ -13,4 +13,6 @@ public interface UserService {
     public void save(User theUser);
 
     public void deleteByUsername(String theUsername);
+
+    public void insertAuthority(String username, String authority);
 }

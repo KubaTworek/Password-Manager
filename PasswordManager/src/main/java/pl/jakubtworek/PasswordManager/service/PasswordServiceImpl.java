@@ -94,11 +94,19 @@ public class PasswordServiceImpl implements PasswordService{
 
     @Override
     @Transactional
-    public void saveWithCategoryAndUser(Password thePassword, Category category) {
+    public void saveWithCategory(Password thePassword, Category category) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
 
         thePassword.setUser(userService.findByUsername(currentPrincipalName));
+        thePassword.setCategory(category);
+        save(thePassword);
+    }
+
+    @Override
+    @Transactional
+    public void saveWithCategoryAndUser(Password thePassword, Category category, User user) {
+        thePassword.setUser(user);
         thePassword.setCategory(category);
         save(thePassword);
     }

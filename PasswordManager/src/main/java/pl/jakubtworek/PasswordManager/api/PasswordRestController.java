@@ -20,9 +20,6 @@ public class PasswordRestController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/passwords")
     public List<Password> getPasswords(){
         return passwordService.findAll();
@@ -63,12 +60,12 @@ public class PasswordRestController {
         return passwordService.findByNameAndUser(passwordName,username);
     }*/
 
-    @GetMapping("/passwords/user/{username}/{categoryId}")
+/*    @GetMapping("/passwords/user/{username}/{categoryId}")
     public List<Password> getPasswordsByUserAndCategory(@PathVariable String username, @PathVariable int categoryId) throws Exception {
         if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
 
-        return passwordService.findByCategoryAndUser(categoryService.findById(categoryId),username);
-    }
+        return passwordService.findByCategory(passwordService.findAllByUser()categoryService.findById(categoryId),username);
+    }*/
 
     @PostMapping("/password")
     public Password savePassword(@RequestBody Password thePassword){

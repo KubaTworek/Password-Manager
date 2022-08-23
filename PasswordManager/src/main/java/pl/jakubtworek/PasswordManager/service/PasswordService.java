@@ -19,7 +19,9 @@ public interface PasswordService {
 
     public void save(Password thePassword);
 
-    public void saveWithCategoryAndUser(Password thePassword, Category category);
+    public void saveWithCategory(Password thePassword, Category category);
+
+    public void saveWithCategoryAndUser(Password thePassword, Category category, User user);
 
     public void deleteById(int theId);
 }
