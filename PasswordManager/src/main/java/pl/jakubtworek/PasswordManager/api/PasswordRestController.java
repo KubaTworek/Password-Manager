@@ -20,6 +20,9 @@ public class PasswordRestController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/passwords")
     public List<Password> getPasswords(){
         return passwordService.findAll();
@@ -30,6 +33,36 @@ public class PasswordRestController {
         if(passwordService.findById(passwordId) == null) throw new Exception("Password id not found - " + passwordId);
 
         return passwordService.findById(passwordId);
+    }
+
+    @PostMapping("/password")
+    public Password savePassword(@RequestBody Password thePassword){
+        thePassword.setId(0);
+        passwordService.save(thePassword);
+
+        return thePassword;
+    }
+
+    @PutMapping("/password")
+    public void updatePassword(@RequestBody Password newPassword){
+        if(passwordService.findById(newPassword.getId()) != null){
+            Password password = passwordService.findById(newPassword.getId());
+            password.setName(newPassword.getName());
+            password.setValue(newPassword.getValue());
+            password.setCategory(categoryService.findById(newPassword.getCategory().getId()));
+            password.setUser(userService.findByUsername(newPassword.getUser().getUsername()));
+            passwordService.save(password);
+        } else {
+            passwordService.save(newPassword);
+        }
+    }
+
+    @DeleteMapping("/password/{passwordId}")
+    public String deletePassword(@PathVariable int passwordId) throws Exception {
+        if(passwordService.findById(passwordId) == null) throw new Exception("Password id not found - " + passwordId);
+        passwordService.deleteById(passwordId);
+
+        return "Deleted password is - " + passwordId;
     }
 
     @GetMapping("/passwords/name/{passwordName}")
@@ -52,35 +85,4 @@ public class PasswordRestController {
 
         return passwordService.findAllByUser(username);
     }
-
-/*    @GetMapping("/password/user/{username}/{passwordName}")
-    public List<Password> getPasswordsByUserAndName(@PathVariable String username, @PathVariable String passwordName) throws Exception {
-        if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
-
-        return passwordService.findByNameAndUser(passwordName,username);
-    }*/
-
-/*    @GetMapping("/passwords/user/{username}/{categoryId}")
-    public List<Password> getPasswordsByUserAndCategory(@PathVariable String username, @PathVariable int categoryId) throws Exception {
-        if(passwordService.findAllByUser(username).isEmpty()) throw new Exception("Passwords for that user not found");
-
-        return passwordService.findByCategory(passwordService.findAllByUser()categoryService.findById(categoryId),username);
-    }*/
-
-    @PostMapping("/password")
-    public Password savePassword(@RequestBody Password thePassword){
-        thePassword.setId(0);
-        passwordService.save(thePassword);
-
-        return thePassword;
-    }
-
-    @DeleteMapping("/password/{passwordId}")
-    public String deletePassword(@PathVariable int passwordId) throws Exception {
-        if(passwordService.findById(passwordId) == null) throw new Exception("Password id not found - " + passwordId);
-        passwordService.deleteById(passwordId);
-
-        return "Deleted password is - " + passwordId;
-    }
-
 }

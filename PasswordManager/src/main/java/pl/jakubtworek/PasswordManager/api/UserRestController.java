@@ -1,9 +1,7 @@
 package pl.jakubtworek.PasswordManager.api;
 
 import org.springframework.web.bind.annotation.*;
-import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.User;
-import pl.jakubtworek.PasswordManager.service.CategoryService;
 import pl.jakubtworek.PasswordManager.service.UserService;
 
 import java.util.List;
@@ -36,19 +34,7 @@ public class UserRestController {
         return theUser;
     }
 
-//    @PutMapping("/password")
-//    public void updatePassword(@RequestBody Password newPassword){
-//        if(passwordService.findById(newPassword.getId()) != null){
-//            Password password = passwordService.findById(newPassword.getId());
-//            password.setName(newPassword.getName());
-//            password.setValue(newPassword.getValue());
-//            password.setCategory(categoryService.findById(newPassword.getCategory()));
-//            password.setUser(userService.findByUsername(newPassword.getUser_username()));
-//            passwordService.save(password);
-//        } else {
-//            passwordService.save(newPassword);
-//        }
-//    }
+
 
     @DeleteMapping("/users/{userUsername}")
     public String deleteUser(@PathVariable String userUsername) throws Exception {

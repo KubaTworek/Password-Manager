@@ -33,6 +33,8 @@ public class CategoryServiceImpl implements CategoryService{
 
         if (result.isPresent()) {
             theCategory = result.get();
+        } else {
+            throw new RuntimeException("Did not find category with id - " + theId);
         }
 
         return theCategory;
@@ -44,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
         for(Category category  : categories){
             if(Objects.equals(category.getName(), theName)) return category;
         }
-        throw new RuntimeException("Did not find password name - " + theName);
+        throw new RuntimeException("Did not find category with name - " + theName);
     }
 
     @Override

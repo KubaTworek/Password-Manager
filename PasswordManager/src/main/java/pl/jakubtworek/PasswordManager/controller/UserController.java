@@ -54,9 +54,9 @@ public class UserController {
         Password thePassword = new Password();
 
         List<Category> theCategories = categoryService.findAll();
+        theModel.addAttribute("categories", theCategories);
 
         theModel.addAttribute("password", thePassword);
-        theModel.addAttribute("categories", theCategories);
 
         return "user/password-form";
     }
@@ -69,9 +69,10 @@ public class UserController {
         String decodedString = new String(Base64.decodeBase64(thePassword.getValue().getBytes()));
         thePassword.setValue(decodedString);
 
-        theModel.addAttribute("password", thePassword);
         List<Category> theCategories = categoryService.findAll();
         theModel.addAttribute("categories", theCategories);
+
+        theModel.addAttribute("password", thePassword);
 
         return "user/password-form";
     }

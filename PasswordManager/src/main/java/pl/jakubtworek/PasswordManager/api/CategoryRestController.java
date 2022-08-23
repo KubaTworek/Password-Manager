@@ -1,11 +1,8 @@
 package pl.jakubtworek.PasswordManager.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.jakubtworek.PasswordManager.entity.Category;
-import pl.jakubtworek.PasswordManager.entity.Password;
 import pl.jakubtworek.PasswordManager.service.CategoryService;
-import pl.jakubtworek.PasswordManager.service.PasswordService;
 
 import java.util.List;
 
@@ -37,20 +34,6 @@ public class CategoryRestController {
 
         return theCategory;
     }
-
-//    @PutMapping("/password")
-//    public void updatePassword(@RequestBody Password newPassword){
-//        if(passwordService.findById(newPassword.getId()) != null){
-//            Password password = passwordService.findById(newPassword.getId());
-//            password.setName(newPassword.getName());
-//            password.setValue(newPassword.getValue());
-//            password.setCategory(categoryService.findById(newPassword.getCategory()));
-//            password.setUser(userService.findByUsername(newPassword.getUser_username()));
-//            passwordService.save(password);
-//        } else {
-//            passwordService.save(newPassword);
-//        }
-//    }
 
     @DeleteMapping("/category/{categoryId}")
     public String deleteCategory(@PathVariable int categoryId) throws Exception {

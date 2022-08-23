@@ -65,12 +65,13 @@ public class AdminController {
 
         Password thePassword = new Password();
 
-        List<Category> theCategories = categoryService.findAll();
+
         List<User> theUsers = userService.findAll();
         theModel.addAttribute("users", theUsers);
+        List<Category> theCategories = categoryService.findAll();
+        theModel.addAttribute("categories", theCategories);
 
         theModel.addAttribute("password", thePassword);
-        theModel.addAttribute("categories", theCategories);
 
         return "admin/password-form";
     }
@@ -83,19 +84,38 @@ public class AdminController {
         String decodedString = new String(Base64.decodeBase64(thePassword.getValue().getBytes()));
         thePassword.setValue(decodedString);
 
-        theModel.addAttribute("password", thePassword);
+
         List<Category> theCategories = categoryService.findAll();
         theModel.addAttribute("categories", theCategories);
         List<User> theUsers = userService.findAll();
         theModel.addAttribute("users", theUsers);
 
+        theModel.addAttribute("password", thePassword);
+
         return "admin/password-form";
+    }
+
+    @GetMapping("/showFormForAddCategory")
+    public String showFormForAddCategory(Model theModel) {
+
+        Category theCategory = new Category();
+        theModel.addAttribute("category", theCategory);
+
+        return "admin/category-form";
     }
 
     @PostMapping("/save")
     public String savePassword(@ModelAttribute("password") Password thePassword,@RequestParam("category.name") String categoryName,@RequestParam("user.username") String userUsername) {
 
         passwordService.saveWithCategoryAndUser(thePassword, categoryService.findByName(categoryName), userService.findByUsername(userUsername));
+
+        return "redirect:/admin/admin-passwords";
+    }
+
+    @PostMapping("/saveCategory")
+    public String savePassword(@ModelAttribute("category") Category theCategory) {
+
+        categoryService.save(theCategory);
 
         return "redirect:/admin/admin-passwords";
     }

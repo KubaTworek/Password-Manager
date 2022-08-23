@@ -41,9 +41,6 @@ public class PasswordServiceImpl implements PasswordService{
         if (result.isPresent()) {
             thePassword = result.get();
         }
-        else {
-            throw new RuntimeException("Did not find password id - " + theId);
-        }
 
         return thePassword;
     }

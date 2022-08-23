@@ -16,31 +16,22 @@
     <h3>Password Manager</h3>
     <hr>
 
-    <p class="h4 mb-4">Register User</p>
+    <p class="h4 mb-4">Save Category</p>
 
-    <form action="#" th:action="@{/admin/register}"
-          th:object="${user}" method="POST">
+    <form action="#" th:action="@{/admin/saveCategory}"
+          th:object="${category}" method="POST">
 
-        <input type="hidden" th:field="*{username}" />
+        <input type="hidden" th:field="*{id}" />
 
-        <input type="text" th:field="*{username}"
-               class="form-control mb-4 col-4" placeholder="Username">
-
-        <input type="password" th:field="*{password}"
-               class="form-control mb-4 col-4" placeholder="Password">
+        <input type="text" th:field="*{name}"
+               class="form-control mb-4 col-4" placeholder="Name">
 
         <div class="form-row">
-            <div class="col-3">
-                <label>Select type of user:</label>
-                <select name="authority" class="form-control">
-                    <option th:value="ROLE_ADMIN">ADMIN</option>
-                    <option th:value="ROLE_USER">USER</option>
-                </select>
-            </div>
             <div class="col-5">
                 <button type="submit" class="btn btn-info col-2">Save</button>
             </div>
         </div>
+
 
     </form>
 
