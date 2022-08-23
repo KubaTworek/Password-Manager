@@ -1,10 +1,6 @@
 package pl.jakubtworek.PasswordManager.controller;
 
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +18,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private PasswordService passwordService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private UserService userService;
+    private final PasswordService passwordService;
+    private final CategoryService categoryService;
+    private final UserService userService;
+
+    public AdminController(PasswordService passwordService, CategoryService categoryService, UserService userService) {
+        this.passwordService = passwordService;
+        this.categoryService = categoryService;
+        this.userService = userService;
+    }
 
     @GetMapping("/admin-passwords")
     public String getPasswords(Model theModel,@ModelAttribute("keyword") String keyword, @ModelAttribute("category") String category,@ModelAttribute("user") String user) {
@@ -64,7 +63,6 @@ public class AdminController {
     @GetMapping("/showFormForAdd")
     public String showFormForAdd(Model theModel) {
 
-        // create model attribute to bind form data
         Password thePassword = new Password();
 
         List<Category> theCategories = categoryService.findAll();
@@ -81,37 +79,31 @@ public class AdminController {
     public String showFormForUpdate(@RequestParam("passwordId") int theId,
                                     Model theModel) {
 
-        // get the employee from the service
         Password thePassword = passwordService.findById(theId);
         String decodedString = new String(Base64.decodeBase64(thePassword.getValue().getBytes()));
         thePassword.setValue(decodedString);
 
-
-        // set employee as a model attribute to pre-populate the form
         theModel.addAttribute("password", thePassword);
         List<Category> theCategories = categoryService.findAll();
         theModel.addAttribute("categories", theCategories);
         List<User> theUsers = userService.findAll();
         theModel.addAttribute("users", theUsers);
 
-        // send over to our form
         return "admin/password-form";
     }
 
     @PostMapping("/save")
     public String savePassword(@ModelAttribute("password") Password thePassword,@RequestParam("category.name") String categoryName,@RequestParam("user.username") String userUsername) {
 
-        // save the employee
         passwordService.saveWithCategoryAndUser(thePassword, categoryService.findByName(categoryName), userService.findByUsername(userUsername));
 
-        // use a redirect to prevent duplicate submissions
         return "redirect:/admin/admin-passwords";
     }
 
 
     @PostMapping("/register")
     public String showRegisterForm(@ModelAttribute("user") User theUser, String authority) {
-        int strength = 10; // work factor of bcrypt
+        int strength = 10;
         BCryptPasswordEncoder bCryptPasswordEncoder =
                 new BCryptPasswordEncoder(strength, new SecureRandom());
         theUser.setPassword("{bcrypt}"+bCryptPasswordEncoder.encode(theUser.getPassword()));

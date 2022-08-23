@@ -2,20 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <title>Password Directory</title>
+    <title>Password Manager</title>
 </head>
 <body>
 
 <div class="container">
 
-    <h3>Password Directory</h3>
+    <h3>Password Manager</h3>
     <hr>
 
     <p class="h4 mb-4">Register User</p>
@@ -23,7 +21,6 @@
     <form action="#" th:action="@{/admin/register}"
           th:object="${user}" method="POST">
 
-        <!-- Add hidden form field to handle update -->
         <input type="hidden" th:field="*{username}" />
 
         <input type="text" th:field="*{username}"
@@ -32,7 +29,7 @@
         <input type="password" th:field="*{password}"
                class="form-control mb-4 col-4" placeholder="Password">
 
-        <label>Select one category:</label>
+        <label>Select type of user:</label>
         <select name="authority">
             <option th:value="ROLE_ADMIN">ADMIN</option>
             <option th:value="ROLE_USER">USER</option>

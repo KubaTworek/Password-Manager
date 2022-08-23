@@ -4,7 +4,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
@@ -12,8 +11,6 @@ import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.Password;
 import pl.jakubtworek.PasswordManager.entity.User;
 
-import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,17 +18,13 @@ import java.util.Optional;
 @Service
 public class PasswordServiceImpl implements PasswordService{
 
-    private PasswordDAO passwordDAO;
+    private final PasswordDAO passwordDAO;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    public PasswordServiceImpl(PasswordDAO thePasswordDAO) {
+    public PasswordServiceImpl(PasswordDAO thePasswordDAO, UserService userService) {
         passwordDAO = thePasswordDAO;
+        this.userService = userService;
     }
 
     @Override

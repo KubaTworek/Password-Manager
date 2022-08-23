@@ -7,21 +7,21 @@ import pl.jakubtworek.PasswordManager.entity.User;
 import java.util.List;
 
 public interface PasswordService {
-    public List<Password> findAll();
+    List<Password> findAll();
 
-    public List<Password> findByName(String name);
+    List<Password> findByName(String name);
 
-    public List<Password> findByCategory(Category category);
+    List<Password> findByCategory(Category category);
 
-    public Password findById(int theId);
+    Password findById(int theId);
 
-    public List<Password> findAllByUser(String username);
+    List<Password> findAllByUser(String username);
 
-    public void save(Password thePassword);
+    void save(Password thePassword);
 
-    public void saveWithCategory(Password thePassword, Category category);
+    void saveWithCategory(Password thePassword, Category category);
 
-    public void saveWithCategoryAndUser(Password thePassword, Category category, User user);
+    void saveWithCategoryAndUser(Password thePassword, Category category, User user);
 
-    public void deleteById(int theId);
+    void deleteById(int theId);
 }

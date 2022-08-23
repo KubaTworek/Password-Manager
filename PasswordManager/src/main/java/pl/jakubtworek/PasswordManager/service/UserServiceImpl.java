@@ -1,11 +1,8 @@
 package pl.jakubtworek.PasswordManager.service;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import pl.jakubtworek.PasswordManager.dao.UserDAO;
-import pl.jakubtworek.PasswordManager.entity.Password;
 import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.sql.*;
@@ -15,7 +12,7 @@ import java.util.Objects;
 @Service
 public class UserServiceImpl implements UserService{
 
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public UserServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -47,7 +44,7 @@ public class UserServiceImpl implements UserService{
 
     public void insertAuthority(@Param("username") String username, @Param("authority") String authority){
         try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/passwordmanager_db?useSSL=false&serverTimezone=UTC", "root", "qazwsx12345");
-            Statement stmt = conn.createStatement();
+            Statement stmt = conn.createStatement()
         ) {
             String sql = "INSERT INTO authorities(username,authority)" + " values (?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);

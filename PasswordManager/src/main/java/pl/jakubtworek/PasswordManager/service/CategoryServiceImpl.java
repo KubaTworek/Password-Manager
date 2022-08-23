@@ -1,12 +1,9 @@
 package pl.jakubtworek.PasswordManager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import pl.jakubtworek.PasswordManager.dao.CategoryDAO;
-import pl.jakubtworek.PasswordManager.dao.PasswordDAO;
 import pl.jakubtworek.PasswordManager.entity.Category;
-import pl.jakubtworek.PasswordManager.entity.Password;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +12,7 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
-    private CategoryDAO categoryDAO;
+    private final CategoryDAO categoryDAO;
 
     @Autowired
     public CategoryServiceImpl(CategoryDAO theCategoryDAO) {
@@ -36,9 +33,6 @@ public class CategoryServiceImpl implements CategoryService{
 
         if (result.isPresent()) {
             theCategory = result.get();
-        }
-        else {
-            throw new RuntimeException("Did not find category id - " + theId);
         }
 
         return theCategory;
