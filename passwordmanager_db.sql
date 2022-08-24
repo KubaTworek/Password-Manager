@@ -5,24 +5,6 @@ USE `passwordmanager_db`;
 -- Table structure for table `password`
 --
 
-DROP TABLE IF EXISTS `password`;
-
-CREATE TABLE `password` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `value` varchar(45) DEFAULT NULL,
-  `category_id` int  DEFAULT NULL,
-  `user_username` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (category_id) REFERENCES category(id),
-  FOREIGN KEY (user_username) REFERENCES users(username)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-INSERT INTO `password` 
-VALUES 
-(1,'Facebook', '123', 1, 'mary'),
-(2,'Mbank', 'qwerty', 2, 'mary'),
-(3,'Instagram', 'qazwsx', 1, 'susan');
 
 
 CREATE TABLE `category` (
@@ -83,4 +65,18 @@ VALUES
 ('john','ROLE_ADMIN'),
 ('mary','ROLE_USER'),
 ('susan','ROLE_USER');
+
+DROP TABLE IF EXISTS `password`;
+
+CREATE TABLE `password` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `value` varchar(68) DEFAULT NULL,
+  `category_id` int(11)  DEFAULT NULL,
+  `user_username` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`category_id`) REFERENCES `category`(`id`),
+  FOREIGN KEY (`user_username`) REFERENCES `users`(`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 
