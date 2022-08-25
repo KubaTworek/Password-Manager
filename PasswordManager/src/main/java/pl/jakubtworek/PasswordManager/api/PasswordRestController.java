@@ -36,11 +36,11 @@ public class PasswordRestController {
     }
 
     @PostMapping("/password")
-    public Password savePassword(@RequestBody Password thePassword){
+    public List<Password> savePassword(@RequestBody Password thePassword){
         thePassword.setId(0);
         passwordService.save(thePassword);
 
-        return thePassword;
+        return passwordService.findAll();
     }
 
     @PutMapping("/password")
@@ -58,11 +58,11 @@ public class PasswordRestController {
     }
 
     @DeleteMapping("/password/{passwordId}")
-    public String deletePassword(@PathVariable int passwordId) throws Exception {
+    public List<Password>  deletePassword(@PathVariable int passwordId) throws Exception {
         if(passwordService.findById(passwordId) == null) throw new Exception("Password id not found - " + passwordId);
         passwordService.deleteById(passwordId);
 
-        return "Deleted password is - " + passwordId;
+        return passwordService.findAll();
     }
 
     @GetMapping("/passwords/name/{passwordName}")

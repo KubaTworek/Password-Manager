@@ -1,6 +1,7 @@
 package pl.jakubtworek.PasswordManager.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name="category")
+@Component
 public class Category {
 
     @Id
@@ -25,6 +27,11 @@ public class Category {
     private List<Password> passwords;
 
     public Category() {
+    }
+
+    public Category(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public int getId() {

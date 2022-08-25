@@ -1,10 +1,13 @@
 package pl.jakubtworek.PasswordManager.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="password")
+@Component
 public class Password {
 
     @Id
@@ -18,17 +21,25 @@ public class Password {
     @Column(name="value")
     private String value;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="category_id")
     @JsonBackReference(value="category_id")
     private Category category;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="user_username")
     @JsonBackReference(value="user_username")
     private User user;
 
     public Password() {
+    }
+
+    public Password(int id, String name, String value, Category category, User user) {
+        this.id = id;
+        this.name = name;
+        this.value = value;
+        this.category = category;
+        this.user = user;
     }
 
     public int getId() {
@@ -70,4 +81,6 @@ public class Password {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import pl.jakubtworek.PasswordManager.entity.Category;
 import pl.jakubtworek.PasswordManager.entity.User;
 
 import java.util.ArrayList;
@@ -15,18 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 @SpringBootTest
 public class UserServiceTest {
 
     @Autowired
     private JdbcTemplate jdbc;
-
-    @Autowired
-    private PasswordService passwordService;
-
-    @Autowired
-    private CategoryService categoryService;
 
     @Autowired
     private UserService userService;
@@ -38,6 +31,7 @@ public class UserServiceTest {
         jdbc.execute("INSERT INTO category(id, name)" + "VALUES (2,'Bank')");
         jdbc.execute("INSERT INTO users(username, password, enabled)" + "VALUES ('admin_log', 'admin_pas', 1)");
         jdbc.execute("INSERT INTO password(id, name, value, category_id, user_username) " + "VALUES (1,'Facebook','qwerty',1,'admin')");
+        jdbc.execute("SET FOREIGN_KEY_CHECKS=1");
     }
 
     @Test
@@ -89,7 +83,5 @@ public class UserServiceTest {
         jdbc.execute("DELETE FROM password");
         jdbc.execute("DELETE FROM users");
         jdbc.execute("DELETE FROM category");
-        jdbc.execute("SET FOREIGN_KEY_CHECKS=1");
-
     }
 }

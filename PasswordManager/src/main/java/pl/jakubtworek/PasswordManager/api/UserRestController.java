@@ -34,8 +34,6 @@ public class UserRestController {
         return theUser;
     }
 
-
-
     @DeleteMapping("/users/{userUsername}")
     public String deleteUser(@PathVariable String userUsername) throws Exception {
         if(userService.findByUsername(userUsername) == null) throw new Exception("User not found - " + userUsername);

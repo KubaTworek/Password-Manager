@@ -2,6 +2,7 @@ package pl.jakubtworek.PasswordManager.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name="users")
+@Component
 public class User {
 
     @Id
@@ -28,6 +30,12 @@ public class User {
     private List<Password> passwords;
 
     public User() {
+    }
+
+    public User(String username, String password, int enabled) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     public String getUsername() {
